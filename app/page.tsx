@@ -119,7 +119,7 @@ export default function ClaudePortfolio() {
                 {project.image && (
                   <div className="w-full max-w-xs mx-auto md:w-64 md:max-w-none md:mx-0 flex-shrink-0 order-1 md:order-2">
                     <img
-                      src={project.image || "/placeholder.svg"}
+                      src={project.image ? `/gauntlet-portfolio${project.image}` : "/gauntlet-portfolio/placeholder.svg"}
                       alt={`${project.name} preview`}
                       className="w-full h-40 object-cover rounded border"
                     />
@@ -250,7 +250,7 @@ export default function ClaudePortfolio() {
               {project.image && (
                 <div className="w-full max-w-xs mx-auto md:w-80 md:max-w-none md:mx-0 flex-shrink-0 order-1 md:order-2">
                   <img
-                    src={project.image || "/placeholder.svg"}
+                    src={project.image ? `/gauntlet-portfolio${project.image}` : "/gauntlet-portfolio/placeholder.svg"}
                     alt={`${project.name} preview`}
                     className="w-full h-60 object-cover rounded border"
                   />
