@@ -109,3 +109,6 @@ temp/
 
 # temp screenshots (perm screenshots are in public/screenshots/)
 screenshots/
+
+# repomix
+repomix-output.xml
