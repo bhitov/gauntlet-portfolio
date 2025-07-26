@@ -1,0 +1,1042 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.github/
+  workflows/
+    deploy.yml
+app/
+  utils/
+    assets.ts
+  globals.css
+  layout.tsx
+  page.tsx
+  projects.md
+  projects.ts
+.gitignore
+next.config.mjs
+package.json
+postcss.config.mjs
+tailwind.config.ts
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".github/workflows/deploy.yml">
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: ["master"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build
+        run: npm run build
+
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./out
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+</file>
+
+<file path="app/utils/assets.ts">
+// Utility to handle asset paths for both local and GitHub Pages deployment
+export function getAssetPath(path: string): string {
+  // In production (GitHub Pages), we need the repository name prefix
+  // In development (localhost), we don't need any prefix
+  const prefix = process.env.NODE_ENV === 'production' ? '/gauntlet-portfolio' : '';
+  return `${prefix}${path}`;
+}
+</file>
+
+<file path="app/projects.md">
+consenstris: 
+  code: https://github.com/bhitov/consenstris
+  live: https://consenstris-2b45921068e5.herokuapp.com/
+
+robovibe:
+  code: https://github.com/bhitov/robovibe
+  live: robovibe.raspyaspie.com
+
+shortcut finder:
+  code: https://github.com/bhitov/shortcut-finder
+
+BondSnap:
+  code: https://github.com/bhitov/snapconnect
+
+
+SongPad:
+  code: https://github.com/bhitov/wordwise-songpad
+</file>
+
+<file path=".gitignore">
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+.nyc_output
+
+# Next.js
+.next/
+out/
+build/
+dist/
+
+# Production
+*.production
+
+# Misc
+.DS_Store
+*.pem
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Local env files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Vercel
+.vercel
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# OS
+Thumbs.db
+
+# Editor directories and files
+.idea
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids
+*.pid
+*.seed
+*.pid.lock
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Optional stylelint cache
+.stylelintcache
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variable files
+.env.*
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# yarn v2
+.yarn/cache
+.yarn/unplugged
+.yarn/build-state.yml
+.yarn/install-state.gz
+.pnp.*
+
+# Turborepo
+.turbo
+
+# macOS
+.AppleDouble
+.LSOverride
+
+# Screenshots directory (if you want to keep them out of git)
+# screenshots/
+
+# Temporary files
+*.tmp
+*.temp
+tmp/
+temp/
+
+# temp screenshots (perm screenshots are in public/screenshots/)
+screenshots/
+</file>
+
+<file path="package.json">
+{
+  "name": "portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "15.4.4",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "lucide-react": "^0.469.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "typescript": "^5",
+    "tailwindcss": "^3.4.0",
+    "postcss": "^8",
+    "autoprefixer": "^10"
+  }
+}
+</file>
+
+<file path="postcss.config.mjs">
+/** @type {import('postcss-load-config').Config} */
+const config = {
+  plugins: {
+    tailwindcss: {},
+    autoprefixer: {},
+  },
+};
+
+export default config;
+</file>
+
+<file path="tailwind.config.ts">
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  ],
+  theme: {
+    extend: {},
+  },
+  plugins: [],
+};
+export default config;
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "target": "ES2017"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+</file>
+
+<file path="app/globals.css">
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom Scrollbar Styles */
+@layer utilities {
+  /* For Webkit browsers (Chrome, Safari, Edge) */
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: rgb(209 213 219); /* gray-300 */
+    border-radius: 4px;
+    border: 2px solid transparent;
+    background-clip: content-box;
+  }
+
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: rgb(156 163 175); /* gray-400 */
+  }
+
+  /* For Firefox */
+  .custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: rgb(209 213 219) transparent;
+  }
+
+  /* Hide scrollbar for specific elements */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  
+  .no-scrollbar {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+}
+</file>
+
+<file path="app/layout.tsx">
+import type { Metadata } from "next";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "Benjamin Hitov's Gauntlet AI Portfolio",
+  description: "Portfolio of AI and machine learning projects from Gauntlet AI bootcamp",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en">
+      <body className="custom-scrollbar">{children}</body>
+    </html>
+  );
+}
+</file>
+
+<file path="app/projects.ts">
+export interface Project {
+  id: string
+  name: string
+  status: "completed" | "in-progress"
+  description: string
+  technologies: string[]
+  githubUrl?: string
+  liveUrl?: string
+  image?: string
+  extendedDescription?: string
+  keyFeatures?: string[]
+  technicalDetails?: string
+  uniqueAspect?: string
+}
+
+export const projects: Project[] = [
+  {
+    id: "0",
+    name: "RoboVibe",
+    status: "completed",
+    description:
+      "A browser-based, real-time multiplayer game hub where players program their in-game units using natural language prompts.",
+    technologies: ["React", "Express.js", "PostgreSQL", "OpenAI API", "WebSocket", "TypeScript"],
+    githubUrl: "https://github.com/bhitov/robovibe",
+    liveUrl: "https://robovibe.raspyaspie.com",
+    image: "/screenshots/robovibe.png",
+    extendedDescription: "RoboVibe transforms natural language descriptions into executable bot behavior, allowing players to update code mid-match and dynamically evolve game strategy. The platform supports 2-16 player matches in team or free-for-all modes.",
+    keyFeatures: [
+      "Real-time AI coding with multiple AI model options",
+      "Token-based economy system",
+      "Multiple game modes including Orb Collect and Tank Combat",
+      "Guest mode for instant play",
+      "Server-authoritative WebSocket communication",
+      "Dynamic bot behavior updates mid-match"
+    ],
+    technicalDetails: "Built as a TypeScript monorepo using Turborepo and pnpm workspaces. Features a server-authoritative game engine with Express.js backend, Drizzle ORM with PostgreSQL, and React frontend with Tailwind CSS. Integrates OpenAI API with custom prompt templates for natural language programming.",
+    uniqueAspect: "The unique ability to program game units using natural language, making coding accessible to non-programmers while providing depth for experienced developers."
+  },
+  {
+    id: "1",
+    name: "Consenstris",
+    status: "completed",
+    description:
+      "A multiplayer, crowd-controlled browser-based Tetris game where all visitors watch the same single-player game and collectively vote on piece movements.",
+    technologies: ["JavaScript", "Node.js", "WebSocket", "Heroku"],
+    githubUrl: "https://github.com/bhitov/consenstris",
+    liveUrl: "https://consenstris-2b45921068e5.herokuapp.com/",
+    image: "/screenshots/consenstris.png",
+    extendedDescription: "Consenstris reinvents the classic Tetris experience as a social experiment in collective decision-making. All connected players view the same game instance and vote on how to move each falling piece, creating a unique collaborative gaming experience.",
+    keyFeatures: [
+      "NES-accurate Tetris gameplay",
+      "Real-time multiplayer voting system",
+      "Live vote display and activity feed",
+      "High score tracking",
+      "20-second cooldown after game over",
+      "Keyboard controls (Arrow keys + Space)"
+    ],
+    technicalDetails: "Developed with vanilla JavaScript for broad compatibility, deployed on Heroku for scalability. Features WebSocket-based real-time communication for instantaneous vote synchronization across all connected clients.",
+    uniqueAspect: "Transforms the solitary experience of Tetris into a social experiment where collective intelligence (or chaos) determines gameplay outcomes."
+  },
+  {
+    id: "2",
+    name: "SongPad",
+    status: "completed",
+    description:
+      "A Next.js web application for creative songwriting and lyrics management, built as part of the Gauntlet AI bootcamp.",
+    technologies: ["Next.js", "TypeScript", "React", "Vercel"],
+    githubUrl: "https://github.com/bhitov/wordwise-songpad",
+    image: "/screenshots/songpad.jpeg",
+    extendedDescription: "SongPad provides a modern web interface for songwriters to create, edit, and organize their lyrics and musical ideas. Built with Next.js for optimal performance and developer experience.",
+    keyFeatures: [
+      "Modern, responsive web interface",
+      "TypeScript for type safety",
+      "Optimized for Vercel deployment",
+      "Fast development workflow"
+    ],
+    technicalDetails: "Built with Next.js and TypeScript, utilizing modern React patterns and Vercel's edge network for optimal performance. Implements the Geist font family for enhanced readability."
+  },
+  {
+    id: "3",
+    name: "BondSnap",
+    status: "completed",
+    description:
+      "A relationship-focused messaging app combining Snapchat-style ephemeral snaps with AI-powered relationship coaching.",
+    technologies: ["React Native", "Expo", "Firebase", "OpenAI", "Pinecone"],
+    githubUrl: "https://github.com/bhitov/snapconnect",
+    image: "/screenshots/bondsnap.jpeg",
+    extendedDescription: "BondSnap revolutionizes relationship communication by providing real-time AI analysis of conversation dynamics. The app combines ephemeral messaging with persistent coaching insights to help couples and friends improve their communication patterns.",
+    keyFeatures: [
+      "Private 'coach chat' with AI relationship insights",
+      "GPT-4 analysis of conversation dynamics",
+      "Measures 5:1 positivity ratio in communications",
+      "Detects communication 'Four Horsemen' patterns",
+      "Identifies relationship 'Love-Map' gaps",
+      "Supports both romantic and platonic relationships"
+    ],
+    technicalDetails: "Built with React Native and Expo for cross-platform mobile deployment. Uses Firebase Realtime Database and Cloud Functions for backend, OpenAI for conversational analysis, and Pinecone vector database for semantic search capabilities.",
+    uniqueAspect: "The only messaging app with an AI relationship coach that reviews messages and provides real-time, plain-English advice to improve communication patterns."
+  },
+  {
+    id: "4",
+    name: "Shortcut Finder",
+    status: "completed",
+    description:
+      "A macOS menu bar app that records screen activity and uses AI to suggest keyboard shortcuts for clicked UI elements.",
+    technologies: ["Python", "OpenAI API", "macOS APIs", "uv", "just"],
+    githubUrl: "https://github.com/bhitov/shortcut-finder",
+    image: "/screenshots/shortcut-finder.jpeg",
+    extendedDescription: "Shortcut Finder solves the frustration of repeatedly performing actions without knowing their keyboard shortcuts. It watches your screen activity and intelligently suggests the shortcuts you could have used instead.",
+    keyFeatures: [
+      "Start/stop recording with Cmd+Ctrl+S",
+      "Automatic UI element detection",
+      "AI-powered shortcut recommendations",
+      "Results in 'App - action - shortcut' format",
+      "Mock OpenAI mode for testing",
+      "Native macOS menu bar integration"
+    ],
+    technicalDetails: "Built with Python using modern dependency management (uv) and task automation (just). Integrates with macOS screen recording APIs and OpenAI for intelligent shortcut detection. Requires screen recording permissions.",
+    uniqueAspect: "Uses AI to automatically learn and suggest keyboard shortcuts based on your actual usage patterns, eliminating the need to manually memorize shortcuts."
+  },
+  {
+    id: "5",
+    name: "EmailSmart",
+    status: "completed",
+    description:
+      "An AI-powered email assistant that helps compose, manage, and optimize email communications.",
+    technologies: ["React", "Node.js", "AI/ML", "Natural Language Processing"],
+    image: "/placeholder.svg?height=200&width=300",
+    extendedDescription: "EmailSmart leverages advanced AI to help users write more effective emails, manage their inbox intelligently, and improve communication productivity."
+  },
+]
+</file>
+
+<file path="app/page.tsx">
+"use client"
+
+import { useState } from "react"
+import { ChevronRight, ExternalLink, Github, Globe, CheckCircle, ArrowLeft } from "lucide-react"
+import { projects } from "./projects"
+import { getAssetPath } from "./utils/assets"
+
+const commands = [
+  { command: "/projects", description: "View my Gauntlet AI projects" },
+  { command: "/about", description: "About me" },
+  { command: "/contact", description: "Get in touch" },
+]
+
+export default function ClaudePortfolio() {
+  const [activeSection, setActiveSection] = useState<"projects" | "about" | "contact">("projects")
+  const [selectedProject, setSelectedProject] = useState<string | null>(null)
+  const [inputText, setInputText] = useState("/projects")
+
+  const handleCommandClick = (command: string) => {
+    const section = command.replace("/", "") as "projects" | "about" | "contact"
+    setActiveSection(section)
+    setSelectedProject(null)
+    setInputText(command)
+  }
+
+  const handleProjectClick = (projectId: string) => {
+    const project = projects.find((p) => p.id === projectId)
+    if (project) {
+      setSelectedProject(projectId)
+      setInputText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)
+    }
+  }
+
+  const handleBackToProjects = () => {
+    setSelectedProject(null)
+    setInputText("/projects")
+  }
+
+  const renderProjectsList = () => (
+    <div className="space-y-4">
+      <div className="text-gray-600">Projects from Gauntlet AI bootcamp:</div>
+
+      <div className="space-y-6">
+        {projects.map((project, index) => (
+          <div key={project.id} className="space-y-2">
+            <div
+              className="flex items-center gap-3 hover:bg-gray-50 p-2 rounded cursor-pointer transition-colors"
+              onClick={() => handleProjectClick(project.id)}
+              onMouseEnter={() => setInputText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)}
+              onMouseLeave={() => setInputText("/projects")}
+            >
+              <ChevronRight className="w-4 h-4 text-blue-500" />
+              <span className="text-blue-500">{index + 1}.</span>
+              <span className="font-medium">{project.name}</span>
+              <div className="flex items-center gap-2 ml-auto">
+                {project.status === "completed" ? (
+                  <>
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <span className="text-green-600 text-sm">completed</span>
+                  </>
+                ) : (
+                  <span className="text-yellow-600 text-sm">in progress</span>
+                )}
+                <span className="text-gray-400">·</span>
+                <span className="text-blue-500 text-sm">Enter to view details</span>
+              </div>
+            </div>
+
+            <div
+              className="ml-8 p-4 bg-gray-50 rounded-lg space-y-4 hover:bg-gray-100 cursor-pointer transition-colors"
+              onClick={() => handleProjectClick(project.id)}
+              onMouseEnter={() => setInputText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)}
+              onMouseLeave={() => setInputText("/projects")}
+            >
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex-1 space-y-3 order-2 md:order-1">
+                  <p className="text-gray-700">{project.description}</p>
+
+                  <div>
+                    <span className="text-gray-600 font-medium">Technologies:</span>
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {project.technologies.map((tech) => (
+                        <span key={tech} className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-sm">
+                          {tech}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    {project.githubUrl && (
+                      <a
+                        href={project.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Github className="w-4 h-4" />
+                        <span>View Code</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                    {project.liveUrl && (
+                      <a
+                        href={project.liveUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-green-600 hover:text-green-800 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Globe className="w-4 h-4" />
+                        <span>Live Demo</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                </div>
+
+                {project.image && (
+                  <div className="w-full max-w-xs mx-auto md:w-64 md:max-w-none md:mx-0 flex-shrink-0 order-1 md:order-2">
+                    <img
+                      src={getAssetPath(project.image || "/placeholder.svg")}
+                      alt={`${project.name} preview`}
+                      className="w-full h-40 object-cover rounded border"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 text-gray-500 text-sm">
+        <div>
+          For more projects and updates, see: <span className="text-blue-500">github.com/yourusername</span>
+        </div>
+      </div>
+    </div>
+  )
+
+  const renderProjectDetail = () => {
+    const project = projects.find((p) => p.id === selectedProject)
+    if (!project) return null
+
+    const projectIndex = projects.findIndex((p) => p.id === selectedProject)
+
+    return (
+      <div className="space-y-4">
+        <div
+          className="flex items-center gap-2 text-blue-600 hover:text-blue-800 cursor-pointer transition-colors"
+          onClick={handleBackToProjects}
+        >
+          <ArrowLeft className="w-4 h-4" />
+          <span>Back to projects</span>
+        </div>
+
+        <div className="space-y-2">
+          <div className="flex items-center gap-3 p-2 rounded">
+            <ChevronRight className="w-4 h-4 text-blue-500 rotate-90" />
+            <span className="text-blue-500">{projectIndex + 1}.</span>
+            <span className="font-medium">{project.name}</span>
+            <div className="flex items-center gap-2 ml-auto">
+              {project.status === "completed" ? (
+                <>
+                  <CheckCircle className="w-4 h-4 text-green-500" />
+                  <span className="text-green-600 text-sm">completed</span>
+                </>
+              ) : (
+                <span className="text-yellow-600 text-sm">in progress</span>
+              )}
+            </div>
+          </div>
+
+          <div className="ml-8 p-4 bg-gray-50 rounded-lg space-y-6">
+            <div className="flex flex-col md:flex-row gap-6">
+              <div className="flex-1 space-y-4 order-2 md:order-1">
+                <div>
+                  <h3 className="text-gray-900 font-medium mb-2">Project Overview</h3>
+                  <p className="text-gray-700 leading-relaxed">{project.description}</p>
+                  {project.extendedDescription && (
+                    <p className="text-gray-700 leading-relaxed mt-3">{project.extendedDescription}</p>
+                  )}
+                </div>
+
+                {project.keyFeatures && (
+                  <div>
+                    <h3 className="text-gray-900 font-medium mb-2">Key Features</h3>
+                    <ul className="list-disc list-inside space-y-1 text-gray-700">
+                      {project.keyFeatures.map((feature, index) => (
+                        <li key={index}>{feature}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {project.technicalDetails && (
+                  <div>
+                    <h3 className="text-gray-900 font-medium mb-2">Technical Implementation</h3>
+                    <p className="text-gray-700 leading-relaxed">{project.technicalDetails}</p>
+                  </div>
+                )}
+
+                {project.uniqueAspect && (
+                  <div>
+                    <h3 className="text-gray-900 font-medium mb-2">What Makes It Unique</h3>
+                    <p className="text-gray-700 leading-relaxed">{project.uniqueAspect}</p>
+                  </div>
+                )}
+
+                <div>
+                  <span className="text-gray-600 font-medium">Technologies:</span>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {project.technologies.map((tech) => (
+                      <span key={tech} className="px-2 py-1 bg-blue-100 text-blue-700 rounded text-sm">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="flex gap-4">
+                  {project.githubUrl && (
+                    <a
+                      href={project.githubUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      <Github className="w-4 h-4" />
+                      <span>View Code</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                  {project.liveUrl && (
+                    <a
+                      href={project.liveUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-green-600 hover:text-green-800 transition-colors"
+                    >
+                      <Globe className="w-4 h-4" />
+                      <span>Live Demo</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                </div>
+              </div>
+
+              {project.image && (
+                <div className="w-full max-w-xs mx-auto md:w-80 md:max-w-none md:mx-0 flex-shrink-0 order-1 md:order-2">
+                  <img
+                    src={getAssetPath(project.image || "/placeholder.svg")}
+                    alt={`${project.name} preview`}
+                    className="w-full h-60 object-cover rounded border"
+                  />
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  const renderProjects = () => {
+    if (selectedProject) {
+      return renderProjectDetail()
+    }
+    return renderProjectsList()
+  }
+
+  const renderAbout = () => (
+    <div className="space-y-4">
+      <div className="text-gray-600">Background and journey:</div>
+
+      <div className="space-y-4 text-gray-700">
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <h3 className="font-medium text-gray-900 mb-2">🎓 Gauntlet AI Bootcamp Graduate</h3>
+          <p>
+            Completed an intensive AI and machine learning bootcamp focused on practical applications and real-world
+            projects. Gained hands-on experience with modern AI frameworks, neural networks, and production deployment.
+          </p>
+        </div>
+
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <h3 className="font-medium text-gray-900 mb-2">🚀 Skills & Expertise</h3>
+          <div className="grid grid-cols-2 gap-4 mt-2">
+            <div>
+              <span className="font-medium">AI/ML:</span>
+              <div className="text-sm text-gray-600 mt-1">
+                • Machine Learning
+                <br />• Neural Networks
+                <br />• Natural Language Processing
+                <br />• Computer Vision
+              </div>
+            </div>
+            <div>
+              <span className="font-medium">Development:</span>
+              <div className="text-sm text-gray-600 mt-1">
+                • Python, JavaScript
+                <br />• React, Node.js
+                <br />• TensorFlow, PyTorch
+                <br />• API Development
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="p-4 bg-gray-50 rounded-lg">
+          <h3 className="font-medium text-gray-900 mb-2">💡 Passion & Goals</h3>
+          <p>
+            Passionate about building AI solutions that solve real-world problems. Currently exploring opportunities in
+            AI product development and looking to contribute to innovative projects that push the boundaries of what's
+            possible with artificial intelligence.
+          </p>
+        </div>
+      </div>
+    </div>
+  )
+
+  const renderContact = () => (
+    <div className="space-y-4">
+      <div className="text-gray-600">Contact information and links:</div>
+
+      <div className="space-y-3">
+        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+          <span className="text-blue-500">📧</span>
+          <span className="font-medium">Email:</span>
+          <a href="mailto:your.email@example.com" className="text-blue-600 hover:text-blue-800">
+            your.email@example.com
+          </a>
+        </div>
+
+        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+          <Github className="w-5 h-5 text-gray-700" />
+          <span className="font-medium">GitHub:</span>
+          <a
+            href="https://github.com/yourusername"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
+          >
+            github.com/yourusername
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        </div>
+
+        <div className="flex items-center gap-3 p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors">
+          <span className="text-blue-500">💼</span>
+          <span className="font-medium">LinkedIn:</span>
+          <a
+            href="https://linkedin.com/in/yourprofile"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 flex items-center gap-1"
+          >
+            linkedin.com/in/yourprofile
+            <ExternalLink className="w-3 h-3" />
+          </a>
+        </div>
+      </div>
+
+      <div className="mt-6 p-4 bg-blue-50 rounded-lg">
+        <h3 className="font-medium text-blue-900 mb-2">🤝 Open to Opportunities</h3>
+        <p className="text-blue-800 text-sm">
+          I'm actively seeking opportunities in AI/ML engineering, product development, and innovative tech projects.
+          Feel free to reach out for collaborations, job opportunities, or just to connect!
+        </p>
+      </div>
+    </div>
+  )
+
+  return (
+    <div className="h-screen bg-white font-mono text-base flex flex-col">
+      <div className="max-w-6xl mx-auto w-full flex flex-col h-full">
+        {/* Scrollable Main Content */}
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
+          {/* Gauntlet AI Portfolio Header - Always Visible */}
+          <div className="border border-orange-300 rounded-lg p-4 bg-white">
+            <div className="flex items-start gap-2 text-gray-900">
+              <span className="text-orange-300 text-lg">✻</span>
+              <div className="flex-1">
+                <div className="font-medium">Benjamin Hitov's Gauntlet AI Portfolio</div>
+                <div className="text-gray-600 text-sm mt-1">
+                  <div>/projects for portfolio, /about for background</div>
+                  <div className="mt-2">
+                    <span className="text-gray-500">bootcamp:</span> /Users/developer/gauntlet-ai/portfolio
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Section Content */}
+          <div>
+            {activeSection === "projects" && renderProjects()}
+            {activeSection === "about" && renderAbout()}
+            {activeSection === "contact" && renderContact()}
+          </div>
+        </div>
+
+        {/* Fixed Bottom Section */}
+        <div className="flex-shrink-0 p-6 pt-4 space-y-6 bg-white border-t border-gray-300">
+          {/* Input Bar */}
+          <div className="border border-gray-300 rounded-lg p-3 bg-white">
+            <div className="flex items-center gap-2">
+              <span className="text-gray-700">&gt;</span>
+              <div className="flex-1 relative">
+                <input
+                  type="text"
+                  value={inputText}
+                  readOnly
+                  className="w-full bg-transparent border-none outline-none font-mono text-base text-gray-700 cursor-default"
+                  placeholder=""
+                />
+                <div className="absolute right-0 top-1/2 transform -translate-y-1/2 w-2 h-5 bg-gray-700 animate-pulse"></div>
+              </div>
+            </div>
+          </div>
+
+          {/* Command Palette */}
+          <div className="space-y-1">
+            {commands.map((cmd) => (
+              <div
+                key={cmd.command}
+                className={`flex items-start gap-4 p-2 rounded cursor-pointer transition-colors hover:bg-blue-50 ${
+                  activeSection === cmd.command.replace("/", "") ? "bg-blue-100" : ""
+                }`}
+                onClick={() => handleCommandClick(cmd.command)}
+                onMouseEnter={() => setInputText(cmd.command)}
+                onMouseLeave={() => {
+                  // Return to current section state
+                  if (activeSection === "projects" && selectedProject) {
+                    const project = projects.find((p) => p.id === selectedProject)
+                    if (project) {
+                      setInputText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)
+                    } else {
+                      setInputText("/projects")
+                    }
+                  } else {
+                    setInputText(`/${activeSection}`)
+                  }
+                }}
+              >
+                <span className="text-blue-600 font-medium min-w-20">{cmd.command}</span>
+                <span className="text-gray-600">{cmd.description}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+</file>
+
+<file path="next.config.mjs">
+/** @type {import('next').NextConfig} */
+const isProd = process.env.NODE_ENV === 'production';
+
+const basePath = isProd ? '/gauntlet-portfolio' : '';
+
+const nextConfig = {
+  output: 'export',
+  images: {
+    unoptimized: true,
+  },
+  basePath: basePath,
+  assetPrefix: basePath,
+};
+
+export default nextConfig;
+</file>
+
+</files>

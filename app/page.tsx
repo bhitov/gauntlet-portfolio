@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { ChevronRight, ExternalLink, Github, Globe, CheckCircle, ArrowLeft } from "lucide-react"
 import { projects } from "./projects"
 import { getAssetPath } from "./utils/assets"
@@ -12,28 +12,47 @@ const commands = [
 ]
 
 export default function ClaudePortfolio() {
-  const [activeSection, setActiveSection] = useState<"projects" | "about" | "contact">("projects")
-  const [selectedProject, setSelectedProject] = useState<string | null>(null)
-  const [inputText, setInputText] = useState("/projects")
+  const router = useRouter()
+  const pathname = usePathname()
+  const searchParams = useSearchParams()
+
+  // Read state from URL
+  const activeSection = (searchParams.get("section") || "projects") as "projects" | "about" | "contact"
+  const selectedProjectId = searchParams.get("project")
+
+  // Helper to update URL params
+  const setView = (params: Record<string, string | null>) => {
+    const newParams = new URLSearchParams(searchParams.toString())
+    Object.entries(params).forEach(([key, value]) => {
+      if (value === null) {
+        newParams.delete(key)
+      } else {
+        newParams.set(key, value)
+      }
+    })
+    router.push(`${pathname}?${newParams.toString()}`)
+  }
+
+  // Derive input text from current state
+  const getInputText = () => {
+    if (selectedProjectId) {
+      const project = projects.find(p => p.id === selectedProjectId)
+      return project ? `/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}` : "/projects"
+    }
+    return `/${activeSection}`
+  }
 
   const handleCommandClick = (command: string) => {
-    const section = command.replace("/", "") as "projects" | "about" | "contact"
-    setActiveSection(section)
-    setSelectedProject(null)
-    setInputText(command)
+    const section = command.replace("/", "")
+    setView({ section: section, project: null })
   }
 
   const handleProjectClick = (projectId: string) => {
-    const project = projects.find((p) => p.id === projectId)
-    if (project) {
-      setSelectedProject(projectId)
-      setInputText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)
-    }
+    setView({ project: projectId })
   }
 
   const handleBackToProjects = () => {
-    setSelectedProject(null)
-    setInputText("/projects")
+    setView({ project: null })
   }
 
   const renderProjectsList = () => (
@@ -46,8 +65,6 @@ export default function ClaudePortfolio() {
             <div
               className="flex items-center gap-3 hover:bg-gray-50 p-2 rounded cursor-pointer transition-colors"
               onClick={() => handleProjectClick(project.id)}
-              onMouseEnter={() => setInputText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)}
-              onMouseLeave={() => setInputText("/projects")}
             >
               <ChevronRight className="w-4 h-4 text-blue-500" />
               <span className="text-blue-500">{index + 1}.</span>
@@ -69,8 +86,6 @@ export default function ClaudePortfolio() {
             <div
               className="ml-8 p-4 bg-gray-50 rounded-lg space-y-4 hover:bg-gray-100 cursor-pointer transition-colors"
               onClick={() => handleProjectClick(project.id)}
-              onMouseEnter={() => setInputText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)}
-              onMouseLeave={() => setInputText("/projects")}
             >
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-1 space-y-3 order-2 md:order-1">
@@ -141,10 +156,10 @@ export default function ClaudePortfolio() {
   )
 
   const renderProjectDetail = () => {
-    const project = projects.find((p) => p.id === selectedProject)
+    const project = projects.find((p) => p.id === selectedProjectId)
     if (!project) return null
 
-    const projectIndex = projects.findIndex((p) => p.id === selectedProject)
+    const projectIndex = projects.findIndex((p) => p.id === selectedProjectId)
 
     return (
       <div className="space-y-4">
@@ -265,7 +280,7 @@ export default function ClaudePortfolio() {
   }
 
   const renderProjects = () => {
-    if (selectedProject) {
+    if (selectedProjectId) {
       return renderProjectDetail()
     }
     return renderProjectsList()
@@ -410,7 +425,7 @@ export default function ClaudePortfolio() {
               <div className="flex-1 relative">
                 <input
                   type="text"
-                  value={inputText}
+                  value={getInputText()}
                   readOnly
                   className="w-full bg-transparent border-none outline-none font-mono text-base text-gray-700 cursor-default"
                   placeholder=""
@@ -429,20 +444,6 @@ export default function ClaudePortfolio() {
                   activeSection === cmd.command.replace("/", "") ? "bg-blue-100" : ""
                 }`}
                 onClick={() => handleCommandClick(cmd.command)}
-                onMouseEnter={() => setInputText(cmd.command)}
-                onMouseLeave={() => {
-                  // Return to current section state
-                  if (activeSection === "projects" && selectedProject) {
-                    const project = projects.find((p) => p.id === selectedProject)
-                    if (project) {
-                      setInputText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)
-                    } else {
-                      setInputText("/projects")
-                    }
-                  } else {
-                    setInputText(`/${activeSection}`)
-                  }
-                }}
               >
                 <span className="text-blue-600 font-medium min-w-20">{cmd.command}</span>
                 <span className="text-gray-600">{cmd.description}</span>
