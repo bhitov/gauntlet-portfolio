@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Gauntlet AI Portfolio",
+  title: "Benjamin Hitov's Gauntlet AI Portfolio",
   description: "Portfolio of AI and machine learning projects from Gauntlet AI bootcamp",
 };
 
@@ -13,7 +13,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body className="custom-scrollbar">{children}</body>
     </html>
   );
 }

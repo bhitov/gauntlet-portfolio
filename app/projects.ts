@@ -100,7 +100,7 @@ export const projects: Project[] = [
   {
     id: "4",
     name: "Shortcut Finder",
-    status: "in-progress",
+    status: "completed",
     description:
       "A macOS menu bar app that records screen activity and uses AI to suggest keyboard shortcuts for clicked UI elements.",
     technologies: ["Python", "OpenAI API", "macOS APIs", "uv", "just"],
@@ -121,7 +121,7 @@ export const projects: Project[] = [
   {
     id: "5",
     name: "EmailSmart",
-    status: "in-progress",
+    status: "completed",
     description:
       "An AI-powered email assistant that helps compose, manage, and optimize email communications.",
     technologies: ["React", "Node.js", "AI/ML", "Natural Language Processing"],

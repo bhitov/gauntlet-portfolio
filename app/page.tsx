@@ -5,9 +5,9 @@ import { ChevronRight, ExternalLink, Github, Globe, CheckCircle, ArrowLeft } fro
 import { projects } from "./projects"
 
 const commands = [
-  { command: "/projects", description: "View my AI and machine learning projects from Gauntlet AI bootcamp" },
-  { command: "/about", description: "Learn about my background and journey in AI development" },
-  { command: "/contact", description: "Get in touch for collaboration or opportunities" },
+  { command: "/projects", description: "View my Gauntlet AI projects" },
+  { command: "/about", description: "About me" },
+  { command: "/contact", description: "Get in touch" },
 ]
 
 export default function ClaudePortfolio() {
@@ -71,8 +71,8 @@ export default function ClaudePortfolio() {
               onMouseEnter={() => setInputText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)}
               onMouseLeave={() => setInputText("/projects")}
             >
-              <div className="flex gap-6">
-                <div className="flex-1 space-y-3">
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="flex-1 space-y-3 order-2 md:order-1">
                   <p className="text-gray-700">{project.description}</p>
 
                   <div>
@@ -117,7 +117,7 @@ export default function ClaudePortfolio() {
                 </div>
 
                 {project.image && (
-                  <div className="w-64 flex-shrink-0">
+                  <div className="w-full max-w-xs mx-auto md:w-64 md:max-w-none md:mx-0 flex-shrink-0 order-1 md:order-2">
                     <img
                       src={project.image || "/placeholder.svg"}
                       alt={`${project.name} preview`}
@@ -173,8 +173,8 @@ export default function ClaudePortfolio() {
           </div>
 
           <div className="ml-8 p-4 bg-gray-50 rounded-lg space-y-6">
-            <div className="flex gap-6">
-              <div className="flex-1 space-y-4">
+            <div className="flex flex-col md:flex-row gap-6">
+              <div className="flex-1 space-y-4 order-2 md:order-1">
                 <div>
                   <h3 className="text-gray-900 font-medium mb-2">Project Overview</h3>
                   <p className="text-gray-700 leading-relaxed">{project.description}</p>
@@ -248,7 +248,7 @@ export default function ClaudePortfolio() {
               </div>
 
               {project.image && (
-                <div className="w-80 flex-shrink-0">
+                <div className="w-full max-w-xs mx-auto md:w-80 md:max-w-none md:mx-0 flex-shrink-0 order-1 md:order-2">
                   <img
                     src={project.image || "/placeholder.svg"}
                     alt={`${project.name} preview`}
@@ -375,13 +375,13 @@ export default function ClaudePortfolio() {
     <div className="h-screen bg-white font-mono text-base flex flex-col">
       <div className="max-w-6xl mx-auto w-full flex flex-col h-full">
         {/* Scrollable Main Content */}
-        <div className="flex-1 overflow-y-auto p-6 space-y-6">
+        <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
           {/* Gauntlet AI Portfolio Header - Always Visible */}
           <div className="border border-orange-300 rounded-lg p-4 bg-white">
             <div className="flex items-start gap-2 text-gray-900">
               <span className="text-orange-300 text-lg">✻</span>
               <div className="flex-1">
-                <div className="font-medium">Gauntlet AI Portfolio</div>
+                <div className="font-medium">Benjamin Hitov's Gauntlet AI Portfolio</div>
                 <div className="text-gray-600 text-sm mt-1">
                   <div>/projects for portfolio, /about for background</div>
                   <div className="mt-2">
@@ -401,7 +401,7 @@ export default function ClaudePortfolio() {
         </div>
 
         {/* Fixed Bottom Section */}
-        <div className="flex-shrink-0 p-6 pt-0 space-y-6">
+        <div className="flex-shrink-0 p-6 pt-4 space-y-6 bg-white border-t border-gray-300">
           {/* Input Bar */}
           <div className="border border-gray-300 rounded-lg p-3 bg-white">
             <div className="flex items-center gap-2">
