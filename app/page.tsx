@@ -3,6 +3,7 @@
 import { useState } from "react"
 import { ChevronRight, ExternalLink, Github, Globe, CheckCircle, ArrowLeft } from "lucide-react"
 import { projects } from "./projects"
+import { getAssetPath } from "./utils/assets"
 
 const commands = [
   { command: "/projects", description: "View my Gauntlet AI projects" },
@@ -119,7 +120,7 @@ export default function ClaudePortfolio() {
                 {project.image && (
                   <div className="w-full max-w-xs mx-auto md:w-64 md:max-w-none md:mx-0 flex-shrink-0 order-1 md:order-2">
                     <img
-                      src={project.image ? `/gauntlet-portfolio${project.image}` : "/gauntlet-portfolio/placeholder.svg"}
+                      src={getAssetPath(project.image || "/placeholder.svg")}
                       alt={`${project.name} preview`}
                       className="w-full h-40 object-cover rounded border"
                     />
@@ -250,7 +251,7 @@ export default function ClaudePortfolio() {
               {project.image && (
                 <div className="w-full max-w-xs mx-auto md:w-80 md:max-w-none md:mx-0 flex-shrink-0 order-1 md:order-2">
                   <img
-                    src={project.image ? `/gauntlet-portfolio${project.image}` : "/gauntlet-portfolio/placeholder.svg"}
+                    src={getAssetPath(project.image || "/placeholder.svg")}
                     alt={`${project.name} preview`}
                     className="w-full h-60 object-cover rounded border"
                   />
