@@ -1,5 +1,6 @@
 "use client"
 
+import { Suspense } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { ChevronRight, ExternalLink, Github, Globe, CheckCircle, ArrowLeft } from "lucide-react"
 import { projects } from "./projects"
@@ -11,7 +12,7 @@ const commands = [
   { command: "/contact", description: "Get in touch" },
 ]
 
-export default function ClaudePortfolio() {
+function PortfolioContent() {
   const router = useRouter()
   const pathname = usePathname()
   const searchParams = useSearchParams()
@@ -456,3 +457,14 @@ export default function ClaudePortfolio() {
   )
 }
 
+export default function ClaudePortfolio() {
+  return (
+    <Suspense fallback={
+      <div className="h-screen bg-white font-mono text-base flex items-center justify-center">
+        <div className="text-gray-600">Loading...</div>
+      </div>
+    }>
+      <PortfolioContent />
+    </Suspense>
+  )
+}
