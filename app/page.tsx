@@ -25,6 +25,7 @@ function PortfolioContent() {
     searchParams.get("project")
   )
   const [hoverText, setHoverText] = useState<string | null>(null)
+  const [modalImage, setModalImage] = useState<string | null>(null)
 
   // Update URL without page refresh
   const updateURL = (params: Record<string, string | null>) => {
@@ -306,7 +307,8 @@ function PortfolioContent() {
                   <img
                     src={getAssetPath(project.image || "/placeholder.svg")}
                     alt={`${project.name} preview`}
-                    className="w-full h-60 object-cover rounded border"
+                    className="w-full h-60 object-cover rounded border cursor-pointer hover:opacity-90 transition-opacity"
+                    onClick={() => setModalImage(project.image)}
                   />
                 </div>
               )}
@@ -492,6 +494,31 @@ function PortfolioContent() {
           </div>
         </div>
       </div>
+
+      {/* Image Modal */}
+      {modalImage && (
+        <div 
+          className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4"
+          onClick={() => setModalImage(null)}
+        >
+          <div className="relative max-w-7xl max-h-[90vh]">
+            <img
+              src={getAssetPath(modalImage)}
+              alt="Full size preview"
+              className="max-w-full max-h-[90vh] object-contain"
+              onClick={(e) => e.stopPropagation()}
+            />
+            <button
+              className="absolute top-4 right-4 text-white bg-black bg-opacity-50 rounded-full p-2 hover:bg-opacity-70 transition-all"
+              onClick={() => setModalImage(null)}
+            >
+              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
