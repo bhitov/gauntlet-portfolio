@@ -24,6 +24,7 @@ function PortfolioContent() {
   const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
     searchParams.get("project")
   )
+  const [hoverText, setHoverText] = useState<string | null>(null)
 
   // Update URL without page refresh
   const updateURL = (params: Record<string, string | null>) => {
@@ -62,8 +63,10 @@ function PortfolioContent() {
     updateURL(params)
   }
 
-  // Derive input text from current state
+  // Derive input text from current state or hover
   const getInputText = () => {
+    if (hoverText) return hoverText
+    
     if (selectedProjectId) {
       const project = projects.find(p => p.id === selectedProjectId)
       return project ? `/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}` : "/projects"
@@ -94,6 +97,8 @@ function PortfolioContent() {
             <div
               className="flex items-center gap-3 hover:bg-gray-50 p-2 rounded cursor-pointer transition-colors"
               onClick={() => handleProjectClick(project.id)}
+              onMouseEnter={() => setHoverText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)}
+              onMouseLeave={() => setHoverText(null)}
             >
               <ChevronRight className="w-4 h-4 text-blue-500" />
               <span className="text-blue-500">{index + 1}.</span>
@@ -115,6 +120,8 @@ function PortfolioContent() {
             <div
               className="ml-8 p-4 bg-gray-50 rounded-lg space-y-4 hover:bg-gray-100 cursor-pointer transition-colors"
               onClick={() => handleProjectClick(project.id)}
+              onMouseEnter={() => setHoverText(`/projects ${project.name.toLowerCase().replace(/\s+/g, "-")}`)}
+              onMouseLeave={() => setHoverText(null)}
             >
               <div className="flex flex-col md:flex-row gap-6">
                 <div className="flex-1 space-y-3 order-2 md:order-1">
@@ -195,6 +202,8 @@ function PortfolioContent() {
         <div
           className="flex items-center gap-2 text-blue-600 hover:text-blue-800 cursor-pointer transition-colors"
           onClick={handleBackToProjects}
+          onMouseEnter={() => setHoverText("/projects")}
+          onMouseLeave={() => setHoverText(null)}
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Back to projects</span>
@@ -473,6 +482,8 @@ function PortfolioContent() {
                   activeSection === cmd.command.replace("/", "") ? "bg-blue-100" : ""
                 }`}
                 onClick={() => handleCommandClick(cmd.command)}
+                onMouseEnter={() => setHoverText(cmd.command)}
+                onMouseLeave={() => setHoverText(null)}
               >
                 <span className="text-blue-600 font-medium min-w-20">{cmd.command}</span>
                 <span className="text-gray-600">{cmd.description}</span>
