@@ -7,7 +7,7 @@ import { projects } from "./projects"
 import { getAssetPath } from "./utils/assets"
 
 const commands = [
-  { command: "/projects", description: "View my Gauntlet AI projects" },
+  { command: "/projects", description: "Gauntlet AI projects" },
   { command: "/about", description: "About me" },
   { command: "/contact", description: "Get in touch" },
 ]
