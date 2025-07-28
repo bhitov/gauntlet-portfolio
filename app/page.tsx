@@ -308,7 +308,7 @@ function PortfolioContent() {
                     src={getAssetPath(project.image || "/placeholder.svg")}
                     alt={`${project.name} preview`}
                     className="w-full h-60 object-cover rounded border cursor-pointer hover:opacity-90 transition-opacity"
-                    onClick={() => setModalImage(project.image)}
+                    onClick={() => setModalImage(project.image || null)}
                   />
                 </div>
               )}
