@@ -417,7 +417,7 @@ function PortfolioContent() {
   )
 
   return (
-    <div className="h-screen bg-white font-mono text-base flex flex-col">
+    <div className="h-[100dvh] bg-white font-mono text-base flex flex-col">
       <div className="max-w-6xl mx-auto w-full flex flex-col h-full">
         {/* Scrollable Main Content */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar">
@@ -446,7 +446,7 @@ function PortfolioContent() {
         </div>
 
         {/* Fixed Bottom Section */}
-        <div className="flex-shrink-0 p-6 pt-4 space-y-6 bg-white border-t border-gray-300">
+        <div className="flex-shrink-0 p-6 pt-4 space-y-6 bg-white border-t border-gray-300 overflow-hidden max-h-[40vh]">
           {/* Input Bar */}
           <div className="border border-gray-300 rounded-lg p-3 bg-white">
             <div className="flex items-center gap-2">
@@ -488,7 +488,7 @@ function PortfolioContent() {
 export default function ClaudePortfolio() {
   return (
     <Suspense fallback={
-      <div className="h-screen bg-white font-mono text-base flex items-center justify-center">
+      <div className="h-[100dvh] bg-white font-mono text-base flex items-center justify-center">
         <div className="text-gray-600">Loading...</div>
       </div>
     }>
