@@ -1,6 +1,6 @@
 "use client"
 
-import { Suspense } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
 import { ChevronRight, ExternalLink, Github, Globe, CheckCircle, ArrowLeft } from "lucide-react"
 import { projects } from "./projects"
@@ -17,12 +17,16 @@ function PortfolioContent() {
   const pathname = usePathname()
   const searchParams = useSearchParams()
 
-  // Read state from URL
-  const activeSection = (searchParams.get("section") || "projects") as "projects" | "about" | "contact"
-  const selectedProjectId = searchParams.get("project")
+  // Initialize state from URL
+  const [activeSection, setActiveSection] = useState<"projects" | "about" | "contact">(
+    (searchParams.get("section") || "projects") as "projects" | "about" | "contact"
+  )
+  const [selectedProjectId, setSelectedProjectId] = useState<string | null>(
+    searchParams.get("project")
+  )
 
-  // Helper to update URL params
-  const setView = (params: Record<string, string | null>) => {
+  // Update URL without page refresh
+  const updateURL = (params: Record<string, string | null>) => {
     const newParams = new URLSearchParams(searchParams.toString())
     Object.entries(params).forEach(([key, value]) => {
       if (value === null) {
@@ -31,7 +35,31 @@ function PortfolioContent() {
         newParams.set(key, value)
       }
     })
-    router.push(`${pathname}?${newParams.toString()}`)
+    const newURL = `${pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`
+    window.history.pushState(null, '', newURL)
+  }
+
+  // Handle browser back/forward buttons
+  useEffect(() => {
+    const handlePopState = () => {
+      const params = new URLSearchParams(window.location.search)
+      setActiveSection((params.get("section") || "projects") as "projects" | "about" | "contact")
+      setSelectedProjectId(params.get("project"))
+    }
+
+    window.addEventListener('popstate', handlePopState)
+    return () => window.removeEventListener('popstate', handlePopState)
+  }, [])
+
+  // Helper to update both state and URL
+  const setView = (params: Record<string, string | null>) => {
+    if (params.section !== undefined) {
+      setActiveSection((params.section || "projects") as "projects" | "about" | "contact")
+    }
+    if (params.project !== undefined) {
+      setSelectedProjectId(params.project)
+    }
+    updateURL(params)
   }
 
   // Derive input text from current state
