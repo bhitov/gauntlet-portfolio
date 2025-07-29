@@ -2,14 +2,14 @@
 
 import { Suspense, useEffect, useState } from "react"
 import { usePathname, useRouter, useSearchParams } from "next/navigation"
-import { ChevronRight, ExternalLink, Github, Globe, CheckCircle, ArrowLeft } from "lucide-react"
+import { ChevronRight, ExternalLink, Github, Globe, CheckCircle, ArrowLeft, Video } from "lucide-react"
 import { projects } from "./projects"
 import { getAssetPath } from "./utils/assets"
 
 const commands = [
   { command: "/projects", description: "Gauntlet AI projects" },
   { command: "/about", description: "About me" },
-  { command: "/contact", description: "Get in touch" },
+  // { command: "/contact", description: "Get in touch" },
 ]
 
 function PortfolioContent() {
@@ -139,7 +139,7 @@ function PortfolioContent() {
                     </div>
                   </div>
 
-                  <div className="flex gap-4">
+                  <div className="flex gap-4 flex-wrap">
                     {project.githubUrl && (
                       <a
                         href={project.githubUrl}
@@ -166,6 +166,19 @@ function PortfolioContent() {
                         <ExternalLink className="w-3 h-3" />
                       </a>
                     )}
+                    {project.videoUrl && (
+                      <a
+                        href={project.videoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-purple-600 hover:text-purple-800 transition-colors"
+                        onClick={(e) => e.stopPropagation()}
+                      >
+                        <Video className="w-4 h-4" />
+                        <span>Video Demo</span>
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
                   </div>
                 </div>
 
@@ -184,11 +197,6 @@ function PortfolioContent() {
         ))}
       </div>
 
-      <div className="mt-6 text-gray-500 text-sm">
-        <div>
-          For more projects and updates, see: <span className="text-blue-500">github.com/yourusername</span>
-        </div>
-      </div>
     </div>
   )
 
@@ -274,7 +282,7 @@ function PortfolioContent() {
                   </div>
                 </div>
 
-                <div className="flex gap-4">
+                <div className="flex gap-4 flex-wrap">
                   {project.githubUrl && (
                     <a
                       href={project.githubUrl}
@@ -296,6 +304,18 @@ function PortfolioContent() {
                     >
                       <Globe className="w-4 h-4" />
                       <span>Live Demo</span>
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  )}
+                  {project.videoUrl && (
+                    <a
+                      href={project.videoUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-center gap-2 text-purple-600 hover:text-purple-800 transition-colors"
+                    >
+                      <Video className="w-4 h-4" />
+                      <span>Video Demo</span>
                       <ExternalLink className="w-3 h-3" />
                     </a>
                   )}

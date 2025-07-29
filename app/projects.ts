@@ -6,6 +6,7 @@ export interface Project {
   technologies: string[]
   githubUrl?: string
   liveUrl?: string
+  videoUrl?: string
   image?: string
   extendedDescription?: string
   keyFeatures?: string[]
@@ -66,6 +67,7 @@ export const projects: Project[] = [
       "A Next.js web application for creative songwriting and lyrics management, built as part of the Gauntlet AI bootcamp.",
     technologies: ["Next.js", "TypeScript", "React", "Vercel"],
     githubUrl: "https://github.com/bhitov/wordwise-songpad",
+    videoUrl: "https://www.loom.com/share/54b573f17aca45539ec74eca238cad56",
     image: "/screenshots/songpad.jpeg",
     extendedDescription: "SongPad provides a modern web interface for songwriters to create, edit, and organize their lyrics and musical ideas. Built with Next.js for optimal performance and developer experience.",
     keyFeatures: [
@@ -84,6 +86,7 @@ export const projects: Project[] = [
       "A relationship-focused messaging app combining Snapchat-style ephemeral snaps with AI-powered relationship coaching.",
     technologies: ["React Native", "Expo", "Firebase", "OpenAI", "Pinecone"],
     githubUrl: "https://github.com/bhitov/snapconnect",
+    videoUrl: "https://www.loom.com/share/7994260aff414eb2a685b14549fb8e9a",
     image: "/screenshots/bondsnap.jpeg",
     extendedDescription: "BondSnap revolutionizes relationship communication by providing real-time AI analysis of conversation dynamics. The app combines ephemeral messaging with persistent coaching insights to help couples and friends improve their communication patterns.",
     keyFeatures: [
@@ -105,6 +108,7 @@ export const projects: Project[] = [
       "A macOS menu bar app that records screen activity and uses AI to suggest keyboard shortcuts for clicked UI elements.",
     technologies: ["Python", "OpenAI API", "macOS APIs", "uv", "just"],
     githubUrl: "https://github.com/bhitov/shortcut-finder",
+    videoUrl: "https://www.loom.com/share/363992aa26a243958374d3dc61f6cd10",
     image: "/screenshots/shortcut-finder.jpeg",
     extendedDescription: "Shortcut Finder solves the frustration of repeatedly performing actions without knowing their keyboard shortcuts. It watches your screen activity and intelligently suggests the shortcuts you could have used instead.",
     keyFeatures: [
