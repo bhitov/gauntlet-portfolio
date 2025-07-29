@@ -37,7 +37,9 @@ function PortfolioContent() {
         newParams.set(key, value)
       }
     })
-    const newURL = `${pathname}${newParams.toString() ? `?${newParams.toString()}` : ''}`
+    // Preserve the full path including base path
+    const currentPath = window.location.pathname
+    const newURL = `${currentPath}${newParams.toString() ? `?${newParams.toString()}` : ''}`
     window.history.pushState(null, '', newURL)
   }
 
