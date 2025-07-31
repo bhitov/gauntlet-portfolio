@@ -67,6 +67,7 @@ export const projects: Project[] = [
       "A Next.js web application for creative songwriting and lyrics management, built as part of the Gauntlet AI bootcamp.",
     technologies: ["Next.js", "TypeScript", "React", "Vercel"],
     githubUrl: "https://github.com/bhitov/wordwise-songpad",
+    liveUrl: "https://wordwise-d5d830b3a02b.herokuapp.com/",
     videoUrl: "https://www.loom.com/share/54b573f17aca45539ec74eca238cad56",
     image: "/screenshots/songpad.jpeg",
     extendedDescription: "SongPad provides a modern web interface for songwriters to create, edit, and organize their lyrics and musical ideas. Built with Next.js for optimal performance and developer experience.",
